@@ -20,3 +20,7 @@ body{
 .font-wrap{
     display: flex;
 }
+
+.node:nth-of-type(odd){
+    background: lightsalmon;
+}

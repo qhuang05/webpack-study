@@ -13,35 +13,47 @@ module.exports = {
     devtool: "inline-source-map",      // 开启sourcemap，可以快速定位到错误位置
     // !处理模块, loader是有执行顺序的，顺序是自右往左
     module: {
-        rules: [{
-            test: /\.(png|jp?g|gif)$/,
-            // use: ["file-loader"]
-            use: {
-                loader: "file-loader",
-                options: {
-                    name: "[name]_[hash:8].[ext]",
-                    outputPath: 'images/'
+        rules: [
+            {
+                test: /\.(png|jp?g|gif)$/,
+                // use: ["file-loader"]
+                use: {
+                    loader: "file-loader",
+                    options: {
+                        name: "[name]_[hash:8].[ext]",
+                        outputPath: 'images/'
+                    }
                 }
+            }, 
+            {
+                test: /\.(ttf|eot|woff|woff2|svg)$/,
+                use: ["file-loader"]
+            }, 
+            {
+                test: /\.css$/,
+                use: [{
+                    loader: "style-loader",
+                    options: {
+                        injectType: "singletonStyleTag"
+                    }
+                }, "css-loader", "postcss-loader"],
+                // use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
+            }, 
+            {
+                test: /\.less$/,
+                use: ["style-loader", "css-loader", "postcss-loader", "less-loader"],
+                // use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "less-loader"],
+            }, 
+            {
+                test: /\.scss$/,
+                use: ["style-loader", "css-loader", "postcss-loader", "sass-loader"],
+                // use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
+            },
+            {
+                test: /\.js$/,
+                user: 'babel-loader'
             }
-        }, {
-            test: /\.(ttf|eot|woff|woff2|svg)$/,
-            use: ["file-loader"]
-        }, {
-            test: /\.css$/,
-            use: [{
-                loader: "style-loader",
-                options: {
-                    injectType: "singletonStyleTag"
-                }
-            }, "css-loader", "postcss-loader"],
-            // use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"]
-        }, {
-            test: /\.less$/,
-            use: ["style-loader", "css-loader", "postcss-loader", "less-loader"]
-        }, {
-            test: /\.scss$/,
-            use: ["style-loader", "css-loader", "postcss-loader", "sass-loader"]
-        }]
+        ]
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -49,18 +61,24 @@ module.exports = {
             filename: "index.html"
         }),
         new CleanWebpackPlugin(),
+        // 以独立文件生成.css文件, 而不直接以style形式插入页面
         new MiniCssExtractPlugin({
             filename: "[name]_[chunkhash:8].css"
         })
     ],
+    // 基于服务器访问资源, 打包后的模块会放在内存中，速度快，还可以实现热更新
     devServer: {
         contentBase: './dist', 
-        open: true,
         port: 8081,
+        open: true,
         proxy: {
             '/api': {
                 target: 'http://localhost:9092'
             }
-        }
+        },
+        // !HMR，热模块替换, (支持css; js需要额外设置)
+        // !对于css模块：HMR支持style-loader css处理方式, 不支持抽离成独立文件的方式
+        // !对于js模块：HMR需要手动监听需要HMR的模块(module.hot)，当该模块的内容发生改变，会触发回调
+        hotOnly: true
     }
 }

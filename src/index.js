@@ -23,3 +23,24 @@ const axios = require('axios');
 axios.get('/api/info').then(res=>{
     console.log('axios', res);
 })
+
+// HMR
+let btn = document.createElement('button');
+btn.innerHTML = '新增';
+document.body.appendChild(btn);
+btn.onclick = function(){
+    let node = document.createElement('div');
+    node.className = 'node';
+    node.innerHTML = '我是新增内容';
+    document.body.appendChild(node);
+}
+import counter from './js/counter.js'
+import number from './js/number.js'
+counter();
+number();
+if(module.hot){
+    module.hot.accept('./js/number.js', function(){
+        document.body.removeChild(document.querySelector('#number'));
+        number();
+    })
+}
