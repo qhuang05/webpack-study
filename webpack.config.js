@@ -24,11 +24,11 @@ module.exports = {
                         outputPath: 'images/'
                     }
                 }
-            }, 
+            },
             {
                 test: /\.(ttf|eot|woff|woff2|svg)$/,
                 use: ["file-loader"]
-            }, 
+            },
             {
                 test: /\.css$/,
                 use: [{
@@ -38,20 +38,38 @@ module.exports = {
                     }
                 }, "css-loader", "postcss-loader"],
                 // use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
-            }, 
+            },
             {
                 test: /\.less$/,
                 use: ["style-loader", "css-loader", "postcss-loader", "less-loader"],
                 // use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "less-loader"],
-            }, 
+            },
             {
                 test: /\.scss$/,
                 use: ["style-loader", "css-loader", "postcss-loader", "sass-loader"],
                 // use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
             },
+            // babel -> 分析依赖 -> AST(抽象语法树) -> 通过语法转换规则转换代码 -> 生成代码
             {
                 test: /\.js$/,
-                user: 'babel-loader'
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    // options: {
+                    //     // @babel/preset-env将ES6,6,8...等基础特性转化为ES5
+                    //     // presets: ['@babel/preset-env'],
+                    //     presets: [['@babel/preset-env', {
+                    //         targets: {
+                    //             edge: "17",
+                    //             firefox: "60",
+                    //             chrome: "67",
+                    //             safari: "11.1"
+                    //         },
+                    //         corejs: 2,//新版本需要指定核心库版本
+                    //         useBuiltIns: "usage"//按需注入
+                    //     }]]
+                    // }
+                }
             }
         ]
     },
@@ -68,7 +86,7 @@ module.exports = {
     ],
     // 基于服务器访问资源, 打包后的模块会放在内存中，速度快，还可以实现热更新
     devServer: {
-        contentBase: './dist', 
+        contentBase: './dist',
         port: 8081,
         open: true,
         proxy: {

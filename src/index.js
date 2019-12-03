@@ -44,3 +44,11 @@ if(module.hot){
         number();
     })
 }
+
+
+// babel
+// import '@babel/polyfill';   //完整的es新特性库，设置了按需注入useBuiltIns:"usage"后不需要手动引入
+const A = new Promise(()=>{});
+[1,2,3].map(item=>{
+    console.log(item);
+});

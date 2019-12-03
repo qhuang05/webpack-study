@@ -4,10 +4,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
-    entry: "./src/index.js",
+    entry: "./src/app.js",
     output: {
-        path: path.resolve(__dirname, "./dev"),
-        filename: "index.js"
+        path: path.resolve(__dirname, "./dist"),
+        filename: "main.js"
     },
     mode: "development",        // 开发模式，"developent"或"production"
     devtool: "inline-source-map",      // 开启sourcemap，可以快速定位到错误位置
@@ -55,20 +55,6 @@ module.exports = {
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
-                    // options: {
-                    //     // @babel/preset-env将ES6,6,8...等基础特性转化为ES5
-                    //     // presets: ['@babel/preset-env'],
-                    //     presets: [['@babel/preset-env', {
-                    //         targets: {
-                    //             edge: "17",
-                    //             firefox: "60",
-                    //             chrome: "67",
-                    //             safari: "11.1"
-                    //         },
-                    //         corejs: 2,//新版本需要指定核心库版本
-                    //         useBuiltIns: "usage"//按需注入
-                    //     }]]
-                    // }
                 }
             }
         ]
