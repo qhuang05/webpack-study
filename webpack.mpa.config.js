@@ -1,21 +1,18 @@
-// todo: 多页面打包通用方案
+// todo: 多页面打包
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
-const glob = require('glob');
-
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
     entry: {
-        index: './src_multi/index/index.js',
-        list: './src_multi/list/index.js',
-        detail: './src_multi/detail/index.js'
+        index: './src_mpa/index/index.js',
+        list: './src_mpa/list/index.js',
+        detail: './src_mpa/detail/index.js'
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
-        filename: "[name].js"
+        filename: "[name]_[chunkhash:8].js"
     },
     mode: "development",        // 开发模式，"developent"或"production"
     devtool: "inline-source-map",      // 开启sourcemap，可以快速定位到错误位置
@@ -69,17 +66,17 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: "./src_multi/index/index.html",
+            template: "./src_mpa/index/index.html",
             filename: "index.html",
             chunks: ["index"]
         }),
         new HtmlWebpackPlugin({
-            template: "./src_multi/list/index.html",
+            template: "./src_mpa/list/index.html",
             filename: "list.html",
             chunks: ["list"]
         }),
         new HtmlWebpackPlugin({
-            template: "./src_multi/detail/index.html",
+            template: "./src_mpa/detail/index.html",
             filename: "detail.html",
             chunks: ["detail"]
         }),

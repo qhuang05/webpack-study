@@ -8,7 +8,7 @@
     "server": "webpack-dev-server",
     "dev": "webpack --config webpack.dev.config.js",
     "react": "webpack --config webpack.react.config.js",
-    "multiple": "webpack --config webpack.multi2.config.js"
+    "mpa": "webpack --config webpack.mpa2.config.js"
   },
   "keywords": [],
   "author": "",

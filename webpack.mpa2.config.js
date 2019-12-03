@@ -1,18 +1,40 @@
-// todo: 多页面打包
+// todo: 多页面打包通用方案
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const glob = require('glob');
+const setMPA = ()=>{
+    const entry = {}, htmlwebpackPlugins = [];
+    const entryFiles = glob.sync(path.join(__dirname, './src_mpa/*/index.js'));
+    console.log(entryFiles);
+    entryFiles.map((item,index) =>{
+        const match = item.match(/src_mpa\/(.*)\/index.js$/);
+        // console.log(match)
+        const pageName = match && match[1];
+        entry[pageName] = item;
+        htmlwebpackPlugins.push(new HtmlWebpackPlugin({
+            template: path.join(__dirname, `./src_mpa/${pageName}/index.html`),
+            filename: `${pageName}.html`,
+            chunks: [pageName],
+            inject: true,
+            title: pageName
+        }))
+    });
+    return {
+        entry,
+        htmlwebpackPlugins
+    }
+}
+const {entry, htmlwebpackPlugins} = setMPA();
+// console.log(entry);
+// console.log(htmlwebpackPlugins);
 
 module.exports = {
-    entry: {
-        index: './src_multi/index/index.js',
-        list: './src_multi/list/index.js',
-        detail: './src_multi/detail/index.js'
-    },
+    entry,
     output: {
         path: path.resolve(__dirname, "./dist"),
-        filename: "[name]_[chunkhash:8].js"
+        filename: "[name].js"
     },
     mode: "development",        // 开发模式，"developent"或"production"
     devtool: "inline-source-map",      // 开启sourcemap，可以快速定位到错误位置
@@ -65,21 +87,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            template: "./src_multi/index/index.html",
-            filename: "index.html",
-            chunks: ["index"]
-        }),
-        new HtmlWebpackPlugin({
-            template: "./src_multi/list/index.html",
-            filename: "list.html",
-            chunks: ["list"]
-        }),
-        new HtmlWebpackPlugin({
-            template: "./src_multi/detail/index.html",
-            filename: "detail.html",
-            chunks: ["detail"]
-        }),
+        ...htmlwebpackPlugins,
         new CleanWebpackPlugin(),
         // 以独立文件生成.css文件, 而不直接以style形式插入页面
         new MiniCssExtractPlugin({
