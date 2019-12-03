@@ -1,14 +1,21 @@
-// todo: React配置环境
+// todo: 多页面打包通用方案
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const glob = require('glob');
+
 
 module.exports = {
-    entry: "./src/app.js",
+    entry: {
+        index: './src_multi/index/index.js',
+        list: './src_multi/list/index.js',
+        detail: './src_multi/detail/index.js'
+    },
     output: {
         path: path.resolve(__dirname, "./dist"),
-        filename: "main.js"
+        filename: "[name].js"
     },
     mode: "development",        // 开发模式，"developent"或"production"
     devtool: "inline-source-map",      // 开启sourcemap，可以快速定位到错误位置
@@ -62,8 +69,19 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: "./src/index.html",
-            filename: "index.html"
+            template: "./src_multi/index/index.html",
+            filename: "index.html",
+            chunks: ["index"]
+        }),
+        new HtmlWebpackPlugin({
+            template: "./src_multi/list/index.html",
+            filename: "list.html",
+            chunks: ["list"]
+        }),
+        new HtmlWebpackPlugin({
+            template: "./src_multi/detail/index.html",
+            filename: "detail.html",
+            chunks: ["detail"]
         }),
         new CleanWebpackPlugin(),
         // 以独立文件生成.css文件, 而不直接以style形式插入页面
