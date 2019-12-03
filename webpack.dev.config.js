@@ -82,7 +82,14 @@ module.exports = {
         // 以独立文件生成.css文件, 而不直接以style形式插入页面
         new MiniCssExtractPlugin({
             filename: "[name]_[chunkhash:8].css"
-        })
+        }),
+        // ["@babel/plugin-transform-runtime", {
+        //     "absoluteRuntime": false,        
+        //     "corejs": false,        
+        //     "helpers": true,        
+        //     "regenerator": true,        
+        //     "useESModules": fals
+        // }]
     ],
     // 基于服务器访问资源, 打包后的模块会放在内存中，速度快，还可以实现热更新
     devServer: {
@@ -98,5 +105,12 @@ module.exports = {
         // !对于css模块：HMR支持style-loader css处理方式, 不支持抽离成独立文件的方式
         // !对于js模块：HMR需要手动监听需要HMR的模块(module.hot)，当该模块的内容发生改变，会触发回调
         hotOnly: true
-    }
+    },
+    // webpack开启监听模式
+    // watch: true, // 默认false, 配合watchOptions, 只有开启才有作⽤
+    // watchOptions: {    
+    //     ignored: /node_modules/, ///默认为空，不监听的文件或者目录，支持正则
+    //     aggregateTimeout: 300,   //监听到⽂件变化后，等300ms再去执⾏，默认300ms
+    //     poll: 1000               //ms, 判断文件是否发生变化是通过不停的询问系统指定文件有没有变化，默认每秒问1次 
+    // } 
 }
