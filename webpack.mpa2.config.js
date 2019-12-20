@@ -1,4 +1,4 @@
-// todo: 多页面打包通用方案
+// !多页面打包通用方案
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
