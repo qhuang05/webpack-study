@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 module.exports = {
     entry: "./src/index.js",
     output: {
-        path: path.resolve(__dirname, "./dev"),
+        path: path.resolve(__dirname, "./dist"),
         filename: "index.js"
     },
     mode: "development",        // 开发模式，"developent"或"production"
@@ -79,7 +79,7 @@ module.exports = {
             filename: "index.html"
         }),
         new CleanWebpackPlugin(),
-        // 以独立文件生成.css文件, 而不直接以style形式插入页面
+        // 以独立文件生成.css文件, 而不直接以style形式插入页面(可以在vue-loader查看文档, https://vue-loader.vuejs.org/zh/guide/extract-css.html)
         new MiniCssExtractPlugin({
             filename: "[name]_[chunkhash:8].css"
         }),
@@ -107,10 +107,10 @@ module.exports = {
         hotOnly: true
     },
     // webpack开启监听模式
-    // watch: true, // 默认false, 配合watchOptions, 只有开启才有作⽤
+    // watch: true, // 默认false, 配合watchOptions, 只有开启才有作用
     // watchOptions: {    
     //     ignored: /node_modules/, ///默认为空，不监听的文件或者目录，支持正则
-    //     aggregateTimeout: 300,   //监听到⽂件变化后，等300ms再去执⾏，默认300ms
+    //     aggregateTimeout: 300,   //监听到文件变化后，等300ms再去执行，默认300ms
     //     poll: 1000               //ms, 判断文件是否发生变化是通过不停的询问系统指定文件有没有变化，默认每秒问1次 
     // } 
 }
